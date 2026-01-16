@@ -99,18 +99,9 @@ function ChevronIcon({ expanded }: { expanded: boolean }) {
 	);
 }
 
-const MOBILE_BREAKPOINT = 600;
-
-function getInitialExpanded() {
-	// Check if running in browser and viewport is mobile-sized
-	if (typeof window !== "undefined") {
-		return window.innerWidth >= MOBILE_BREAKPOINT;
-	}
-	return true; // Default to expanded for SSR
-}
-
 export function ControlPanel() {
-	const [isExpanded, setIsExpanded] = useState(getInitialExpanded);
+	// Default collapsed; CSS media query handles mobile, useEffect expands on desktop
+	const [isExpanded, setIsExpanded] = useState(false);
 	const isPlaying = useAtomValue(isPlayingAtom);
 	const [timeScale, setTimeScale] = useAtom(timeScaleAtom);
 	const [roll, setRoll] = useAtom(rollAtom);
@@ -128,14 +119,11 @@ export function ControlPanel() {
 
 	const selectedOrbit = getOrbitById(orbitTypeId);
 
-	// Set collapsed state on mobile after mount (more reliable than useState initializer)
-	const initialCheckDone = useRef(false);
+	// Expand on desktop after mount (CSS media query keeps mobile collapsed)
 	useEffect(() => {
-		if (!initialCheckDone.current) {
-			initialCheckDone.current = true;
-			if (window.innerWidth < MOBILE_BREAKPOINT) {
-				setIsExpanded(false);
-			}
+		const isDesktop = window.matchMedia("(min-width: 600px)").matches;
+		if (isDesktop) {
+			setIsExpanded(true);
 		}
 	}, []);
 

@@ -4,7 +4,7 @@
 	border-top: 1px solid var(--outline);
 	overflow: hidden;
 	padding-bottom: var(--safe-area-bottom);
-	max-height: 33vh;
+	max-height: 33dvh; /* dvh accounts for mobile browser chrome */
 	display: flex;
 	flex-direction: column;
 }
@@ -114,5 +114,15 @@
 @media (max-width: 480px) {
 	.collapsed-playback-controls {
 		display: none;
+	}
+}
+
+/* Default to collapsed on small screens - CSS handles initial state reliably */
+@media (max-width: 599px) {
+	.control-panel:not(.expanded) .panel-content {
+		grid-template-rows: 0fr;
+		padding-bottom: 0;
+		opacity: 0;
+		pointer-events: none;
 	}
 }
