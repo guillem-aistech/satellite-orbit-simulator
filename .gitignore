@@ -1,0 +1,11 @@
+# opensrc - source code for packages
+opensrc/
+
+# Build output
+dist/
+
+# Dependencies
+node_modules/
+
+# dprint cache
+.dprint/
