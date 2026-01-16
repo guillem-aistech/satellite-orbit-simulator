@@ -19,7 +19,7 @@ export const Route = createFileRoute("/")({
 function HomeComponent() {
 	return (
 		// Full-screen layout: 3D scene on top, control panel at bottom
-		<div style={{ width: "100vw", height: "100vh", display: "flex", flexDirection: "column" }}>
+		<div style={{ width: "100dvw", height: "100dvh", display: "flex", flexDirection: "column" }}>
 			{/* 3D scene container - takes remaining space */}
 			<div style={{ flex: 1, position: "relative", minHeight: 0 }}>
 				<Scene>
