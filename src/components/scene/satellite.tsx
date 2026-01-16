@@ -11,9 +11,9 @@
  * - Thermal imaging payload: Bottom-facing sensor
  */
 
-import { useAtomValue } from "@effect-atom/atom-react";
-import { useMemo } from "react";
-import { pitchAtom, rollAtom, yawAtom } from "../../atoms/satellite.ts";
+import { useAtom, useAtomValue } from "@effect-atom/atom-react";
+import { useEffect, useMemo } from "react";
+import { pitchAtom, rollAtom, satellitePositionAtom, yawAtom } from "../../atoms/satellite.ts";
 import { orbitalAngleAtom, orbitTypeAtom } from "../../atoms/simulation.ts";
 import { calculateOrbitalPosition, getOrbitById } from "../../physics/index.ts";
 
@@ -56,6 +56,7 @@ export function Satellite() {
 	const roll = useAtomValue(rollAtom);
 	const pitch = useAtomValue(pitchAtom);
 	const yaw = useAtomValue(yawAtom);
+	const [, setSatellitePosition] = useAtom(satellitePositionAtom);
 
 	const selectedOrbit = getOrbitById(orbitTypeId);
 
@@ -63,6 +64,11 @@ export function Satellite() {
 		() => calculateOrbitalPosition(orbitalAngle, selectedOrbit),
 		[orbitalAngle, selectedOrbit],
 	);
+
+	// Update satellite position atom for camera tracking
+	useEffect(() => {
+		setSatellitePosition(position);
+	}, [position, setSatellitePosition]);
 
 	return (
 		// group: container for all satellite parts, positioned in orbit with attitude rotation

@@ -1,9 +1,11 @@
 import { useAtomValue } from "@effect-atom/atom-react";
 import { OrbitControls } from "@react-three/drei";
-import { Canvas } from "@react-three/fiber";
+import { Canvas, useFrame } from "@react-three/fiber";
 import type { ComponentRef, ReactNode } from "react";
 import { useEffect, useRef } from "react";
-import { selectedAxesAtom } from "../../atoms/camera.ts";
+import { Vector3 } from "three";
+import { cameraTargetAtom, selectedAxesAtom } from "../../atoms/camera.ts";
+import { satellitePositionAtom } from "../../atoms/satellite.ts";
 import { EARTH_RADIUS, SUN_DISTANCE } from "../../physics/index.ts";
 
 interface SceneProps {
@@ -12,7 +14,7 @@ interface SceneProps {
 
 const DEFAULT_CAMERA_POSITION: [number, number, number] = [-4, 4, 6];
 
-// OrbitControls properties needed for axis locking
+// OrbitControls properties needed for axis locking and target tracking
 interface OrbitControlsLike {
 	minAzimuthAngle: number;
 	maxAzimuthAngle: number;
@@ -20,16 +22,41 @@ interface OrbitControlsLike {
 	maxPolarAngle: number;
 	getAzimuthalAngle: () => number;
 	getPolarAngle: () => number;
+	target: Vector3;
+	update: () => void;
 }
 
 // Camera controls that can lock rotation to selected axes (X, Y, Z)
 // Y = horizontal rotation, X/Z = vertical rotation
+// Also handles camera target tracking (Earth or Satellite)
 function ConstrainedOrbitControls() {
 	const controlsRef = useRef<ComponentRef<typeof OrbitControls>>(null);
 	const selectedAxes = useAtomValue(selectedAxesAtom);
+	const cameraTarget = useAtomValue(cameraTargetAtom);
+	const satellitePosition = useAtomValue(satellitePositionAtom);
 
 	// Store angles when constraints are applied
 	const lockedAnglesRef = useRef<{ azimuth: number; polar: number } | null>(null);
+
+	// Smoothly interpolate camera target to follow satellite
+	useFrame(() => {
+		if (!controlsRef.current) return;
+		const controls = controlsRef.current as OrbitControlsLike;
+
+		if (cameraTarget === "satellite") {
+			// Smoothly move target to satellite position
+			const targetPos = new Vector3(...satellitePosition);
+			controls.target.lerp(targetPos, 0.1);
+			controls.update();
+		} else {
+			// Smoothly return to Earth center
+			const earthCenter = new Vector3(0, 0, 0);
+			if (controls.target.distanceTo(earthCenter) > 0.01) {
+				controls.target.lerp(earthCenter, 0.1);
+				controls.update();
+			}
+		}
+	});
 
 	useEffect(() => {
 		if (!controlsRef.current) return;
@@ -91,7 +118,7 @@ function ConstrainedOrbitControls() {
 		<OrbitControls
 			ref={controlsRef}
 			makeDefault
-			minDistance={EARTH_RADIUS * 1.5}
+			minDistance={EARTH_RADIUS * 0.5}
 			maxDistance={SUN_DISTANCE * 2}
 			enablePan={true}
 			enableZoom={true}

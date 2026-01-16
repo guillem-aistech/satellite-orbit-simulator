@@ -4,7 +4,13 @@ import { useFrame, useThree } from "@react-three/fiber";
 import { useEffect, useRef, useState } from "react";
 import type { Camera, Group } from "three";
 import { Vector3 } from "three";
-import { type AxisKey, selectedAxesAtom } from "../../atoms/camera.ts";
+import {
+	type AxisKey,
+	type CameraTarget,
+	cameraTargetAtom,
+	selectedAxesAtom,
+} from "../../atoms/camera.ts";
+import { SegmentedButton, type SegmentedButtonOption } from "../ui/segmented_button.tsx";
 
 const AXIS_LENGTH = 0.5;
 const HITBOX_SIZE = 0.15;
@@ -27,6 +33,12 @@ const DEFAULT_CAMERA_TARGET = new Vector3(0, 0, 0);
 const GIZMO_WIDTH = 100;
 const GIZMO_HEIGHT = 180;
 const MIN_MARGIN = 20;
+
+// Camera view options
+const CAMERA_VIEW_OPTIONS: SegmentedButtonOption<CameraTarget>[] = [
+	{ value: "earth", label: "Earth" },
+	{ value: "satellite", label: "Satellite" },
+];
 
 // Shared refs for camera and controls (updated via MainCameraCapture)
 const cameraRef = { current: null as Camera | null };
@@ -214,6 +226,20 @@ function ResetCameraButton({ offsetX, offsetY }: { offsetX: number; offsetY: num
 	);
 }
 
+function CameraViewToggle({ offsetX, offsetY }: { offsetX: number; offsetY: number }) {
+	const [cameraTarget, setCameraTarget] = useAtom(cameraTargetAtom);
+
+	return (
+		<Html position={[offsetX, offsetY - 1.8, 0]} center style={{ pointerEvents: "auto" }}>
+			<SegmentedButton
+				options={CAMERA_VIEW_OPTIONS}
+				value={cameraTarget}
+				onChange={setCameraTarget}
+			/>
+		</Html>
+	);
+}
+
 function ControlsHelpButton({ offsetX, offsetY }: { offsetX: number; offsetY: number }) {
 	const [showHelp, setShowHelp] = useState(false);
 
@@ -344,6 +370,7 @@ export function SceneToolbar() {
 	return (
 		<Hud>
 			<OrthographicCamera makeDefault position={[0, 0, 10]} zoom={100} />
+			<CameraViewToggle offsetX={offsetX} offsetY={offsetY} />
 			<SyncedAxisGizmo
 				offsetX={offsetX}
 				offsetY={offsetY}

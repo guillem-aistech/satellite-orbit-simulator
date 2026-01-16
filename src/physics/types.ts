@@ -11,8 +11,10 @@ export interface OrbitType {
 	description: string;
 	/** Degrees from equatorial plane */
 	inclination: number;
-	/** Relative to base altitude */
+	/** Relative to base altitude (for scene visualization) */
 	altitudeMultiplier: number;
+	/** Real-world altitude in kilometers */
+	altitudeKm: number;
 	/** Orbital period in seconds */
 	period: number;
 	/** Local Time of Ascending Node (HH:MM) for SSO */

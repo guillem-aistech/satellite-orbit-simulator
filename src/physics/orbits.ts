@@ -1,3 +1,4 @@
+import { calculateOrbitalPeriod } from "./constants.ts";
 import type { OrbitType } from "./types.ts";
 
 /** Convert LTAN (HH:MM) to RAAN in degrees */
@@ -16,7 +17,8 @@ export const DEFAULT_ORBIT: OrbitType = {
 	description: "Flies along terminator. Optimal for thermal imaging.",
 	inclination: 98,
 	altitudeMultiplier: 1.0,
-	period: 5667,
+	altitudeKm: 500,
+	period: calculateOrbitalPeriod(500), // ~5677s (~94.6 min)
 	ltan: "06:00",
 	raan: ltanToRaan("06:00"), // -90°
 };
@@ -30,7 +32,8 @@ export const ORBIT_TYPES: OrbitType[] = [
 		description: "Standard Earth observation orbit. Good illumination.",
 		inclination: 98,
 		altitudeMultiplier: 1.0,
-		period: 5667,
+		altitudeKm: 500,
+		period: calculateOrbitalPeriod(500),
 		ltan: "10:30",
 		raan: ltanToRaan("10:30"), // -22.5°
 	},
@@ -40,7 +43,8 @@ export const ORBIT_TYPES: OrbitType[] = [
 		description: "Maximum illumination contrast. High thermal gradients.",
 		inclination: 98,
 		altitudeMultiplier: 1.0,
-		period: 5667,
+		altitudeKm: 500,
+		period: calculateOrbitalPeriod(500),
 		ltan: "12:00",
 		raan: ltanToRaan("12:00"), // 0°
 	},
@@ -50,7 +54,8 @@ export const ORBIT_TYPES: OrbitType[] = [
 		description: "Full Earth coverage. Variable lighting conditions.",
 		inclination: 90,
 		altitudeMultiplier: 1.1,
-		period: 5740,
+		altitudeKm: 550,
+		period: calculateOrbitalPeriod(550), // ~5765s (~96.1 min)
 		raan: 0,
 	},
 	{
@@ -59,7 +64,8 @@ export const ORBIT_TYPES: OrbitType[] = [
 		description: "Common for CubeSat deployments. Covers ±51.6° latitude.",
 		inclination: 51.6,
 		altitudeMultiplier: 0.84,
-		period: 5490,
+		altitudeKm: 420,
+		period: calculateOrbitalPeriod(420), // ~5555s (~92.6 min)
 		raan: 0,
 	},
 	{
@@ -68,7 +74,8 @@ export const ORBIT_TYPES: OrbitType[] = [
 		description: "General purpose mid-inclination. Technology demos.",
 		inclination: 45,
 		altitudeMultiplier: 0.9,
-		period: 5550,
+		altitudeKm: 450,
+		period: calculateOrbitalPeriod(450), // ~5600s (~93.3 min)
 		raan: 0,
 	},
 	{
@@ -77,7 +84,8 @@ export const ORBIT_TYPES: OrbitType[] = [
 		description: "Zero inclination. Equatorial region coverage only.",
 		inclination: 0,
 		altitudeMultiplier: 1.0,
-		period: 5667,
+		altitudeKm: 500,
+		period: calculateOrbitalPeriod(500),
 		raan: 0,
 	},
 ];

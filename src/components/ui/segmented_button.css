@@ -1,0 +1,44 @@
+.segmented-button-group {
+	display: flex;
+	border-radius: 6px;
+	overflow: hidden;
+	border: 1px solid var(--outline);
+	background: var(--surface-container);
+}
+
+.segmented-button-item {
+	padding: var(--space-xs) var(--space-sm);
+	border: none;
+	background: transparent;
+	color: var(--on-surface-variant);
+	font-family: var(--font-family);
+	font-size: var(--label-sm);
+	font-weight: 500;
+	cursor: pointer;
+	transition: background 0.15s, color 0.15s;
+	white-space: nowrap;
+}
+
+.segmented-button-item:not(:last-child) {
+	border-right: 1px solid var(--outline);
+}
+
+.segmented-button-item:hover:not([data-pressed]):not([data-disabled]) {
+	background: var(--outline);
+	color: var(--on-surface);
+}
+
+.segmented-button-item[data-pressed] {
+	background: var(--primary);
+	color: var(--on-surface);
+}
+
+.segmented-button-item[data-disabled] {
+	opacity: 0.5;
+	cursor: not-allowed;
+}
+
+.segmented-button-item:focus-visible {
+	outline: 2px solid var(--primary);
+	outline-offset: -2px;
+}
