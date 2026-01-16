@@ -1,0 +1,35 @@
+.toggle-root {
+	position: relative;
+	width: 40px;
+	height: 20px;
+	padding: 0;
+	background: var(--outline);
+	border: none;
+	border-radius: 10px;
+	cursor: pointer;
+	transition: background 0.2s ease;
+}
+
+.toggle-root[data-checked] {
+	background: var(--primary);
+}
+
+.toggle-thumb {
+	position: absolute;
+	top: 2px;
+	left: 2px;
+	width: 16px;
+	height: 16px;
+	background: var(--on-surface);
+	border-radius: 50%;
+	transition: transform 0.2s ease;
+}
+
+.toggle-root[data-checked] .toggle-thumb {
+	transform: translateX(20px);
+}
+
+.toggle-root[data-disabled] {
+	opacity: 0.5;
+	cursor: not-allowed;
+}

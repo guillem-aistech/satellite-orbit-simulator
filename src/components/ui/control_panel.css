@@ -1,0 +1,131 @@
+.control-panel {
+	flex-shrink: 0;
+	background: var(--surface-container);
+	border-top: 1px solid var(--outline);
+	overflow: hidden;
+}
+
+.panel-header {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	width: 100%;
+	padding: var(--space-sm) var(--space-md);
+	background: transparent;
+	border: none;
+	cursor: pointer;
+	color: var(--on-surface);
+	transition: background 0.2s ease;
+}
+
+.panel-header:hover {
+	background: var(--surface-container-high);
+}
+
+.panel-header:focus-visible {
+	outline: 2px solid var(--primary);
+	outline-offset: -2px;
+}
+
+.panel-title {
+	font-size: var(--title-sm);
+	font-weight: 600;
+}
+
+.collapsed-status {
+	font-size: var(--label-sm);
+	color: var(--on-surface-variant);
+}
+
+.chevron-icon {
+	color: var(--on-surface-variant);
+	transition: transform 0.3s ease;
+}
+
+.chevron-icon.expanded {
+	transform: rotate(180deg);
+}
+
+.panel-content {
+	display: grid;
+	grid-template-rows: 1fr;
+	padding: 0 var(--space-md) var(--space-md);
+	opacity: 1;
+	overflow: hidden;
+	transition:
+		grid-template-rows 0.3s ease,
+		opacity 0.2s ease,
+		padding 0.3s ease;
+}
+
+.control-panel.collapsed .panel-content {
+	grid-template-rows: 0fr;
+	padding-bottom: 0;
+	opacity: 0;
+	pointer-events: none;
+}
+
+.panel-content > * {
+	overflow: hidden;
+}
+
+.control-section {
+	min-width: 200px;
+	flex-shrink: 0;
+}
+
+/* Orbit section needs more width for description */
+.control-section:first-child {
+	width: 340px;
+}
+
+.section-title {
+	font-size: var(--title-sm);
+	font-weight: 600;
+	color: var(--on-surface);
+}
+
+.slider-label {
+	font-size: var(--label-sm);
+	color: var(--on-surface-variant);
+}
+
+/* Collapsed controls */
+.collapsed-controls {
+	flex-wrap: nowrap;
+}
+
+.collapsed-axis-controls {
+	flex-wrap: nowrap;
+}
+
+.axis-button {
+	width: var(--space-md);
+	height: var(--space-md);
+	padding: 0;
+	border: 1px solid var(--outline);
+	border-radius: var(--space-xs);
+	background: transparent;
+	font-size: var(--label-sm);
+	font-weight: 600;
+	font-family: var(--font-family);
+	cursor: pointer;
+	transition:
+		background 0.15s ease,
+		border-color 0.15s ease;
+}
+
+.axis-button:hover {
+	background: rgba(255, 255, 255, 0.1);
+}
+
+.axis-button.selected {
+	background: rgba(255, 255, 255, 0.15);
+}
+
+/* Hide axis controls on very small screens */
+@media (max-width: 480px) {
+	.collapsed-axis-controls {
+		display: none;
+	}
+}

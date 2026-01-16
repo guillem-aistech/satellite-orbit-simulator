@@ -1,0 +1,44 @@
+.orbit-selector-label {
+	font-size: var(--label-sm);
+	color: var(--on-surface-variant);
+}
+
+.orbit-selector {
+	padding: var(--space-xs) var(--space-sm);
+	background: var(--surface-container-high);
+	border: 1px solid var(--outline);
+	border-radius: 4px;
+	color: var(--on-surface);
+	font-family: var(--font-family);
+	font-size: var(--body-sm);
+	cursor: pointer;
+	appearance: none;
+	background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23ffffff' d='M2 4l4 4 4-4'/%3E%3C/svg%3E");
+	background-repeat: no-repeat;
+	background-position: right var(--space-sm) center;
+	padding-right: calc(var(--space-sm) * 2 + 12px);
+}
+
+.orbit-selector:hover {
+	background-color: var(--surface-container-high);
+	border-color: var(--primary);
+}
+
+.orbit-selector:focus {
+	outline: 2px solid var(--primary);
+	outline-offset: 2px;
+}
+
+.orbit-selector option {
+	background: var(--surface-container);
+	color: var(--on-surface);
+}
+
+.orbit-description {
+	font-size: var(--label-sm);
+	color: var(--on-surface-variant);
+	line-height: 1.4;
+	opacity: 0.8;
+	min-height: 2.8em; /* Reserve space for 2 lines to prevent layout shift */
+	max-width: 320px;
+}

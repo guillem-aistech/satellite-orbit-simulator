@@ -1,0 +1,22 @@
+.tooltip-trigger {
+	display: inline-flex;
+	background: none;
+	border: none;
+	padding: 0;
+	cursor: pointer;
+}
+
+.tooltip-popup {
+	background: var(--surface-container-high);
+	color: var(--on-surface);
+	font-size: var(--label-sm);
+	padding: var(--space-xs);
+	border-radius: 4px;
+	max-width: 200px;
+}
+
+.tooltip-arrow {
+	fill: var(--surface-container-high);
+	width: 12px;
+	height: 6px;
+}

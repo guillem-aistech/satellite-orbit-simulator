@@ -1,0 +1,21 @@
+.play-pause-button {
+	width: var(--space-lg);
+	height: var(--space-lg);
+	padding: 0;
+	border: 1px solid var(--outline);
+	border-radius: var(--space-xs);
+	background: var(--surface-container-high);
+	color: var(--on-surface);
+	cursor: pointer;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	transition:
+		background 0.15s ease,
+		border-color 0.15s ease;
+}
+
+.play-pause-button:hover {
+	background: var(--primary);
+	border-color: var(--primary);
+}

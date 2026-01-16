@@ -1,0 +1,14 @@
+.readout {
+	align-items: baseline;
+}
+
+.readout-label {
+	font-size: var(--label-sm);
+	color: var(--on-surface-variant);
+}
+
+.readout-value {
+	font-size: var(--body-lg);
+	font-family: monospace;
+	color: var(--on-surface);
+}
