@@ -101,8 +101,16 @@ function ChevronIcon({ expanded }: { expanded: boolean }) {
 
 const MOBILE_BREAKPOINT = 600;
 
+function getInitialExpanded() {
+	// Check if running in browser and viewport is mobile-sized
+	if (typeof window !== "undefined") {
+		return window.innerWidth >= MOBILE_BREAKPOINT;
+	}
+	return true; // Default to expanded for SSR
+}
+
 export function ControlPanel() {
-	const [isExpanded, setIsExpanded] = useState(() => window.innerWidth >= MOBILE_BREAKPOINT);
+	const [isExpanded, setIsExpanded] = useState(getInitialExpanded);
 	const isPlaying = useAtomValue(isPlayingAtom);
 	const [timeScale, setTimeScale] = useAtom(timeScaleAtom);
 	const [roll, setRoll] = useAtom(rollAtom);
@@ -119,6 +127,17 @@ export function ControlPanel() {
 	const wasPlayingRef = useRef(isPlaying);
 
 	const selectedOrbit = getOrbitById(orbitTypeId);
+
+	// Set collapsed state on mobile after mount (more reliable than useState initializer)
+	const initialCheckDone = useRef(false);
+	useEffect(() => {
+		if (!initialCheckDone.current) {
+			initialCheckDone.current = true;
+			if (window.innerWidth < MOBILE_BREAKPOINT) {
+				setIsExpanded(false);
+			}
+		}
+	}, []);
 
 	// Handle play/pause transitions
 	useEffect(() => {
