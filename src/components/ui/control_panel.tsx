@@ -99,8 +99,10 @@ function ChevronIcon({ expanded }: { expanded: boolean }) {
 	);
 }
 
+const MOBILE_BREAKPOINT = 600;
+
 export function ControlPanel() {
-	const [isExpanded, setIsExpanded] = useState(true);
+	const [isExpanded, setIsExpanded] = useState(() => window.innerWidth >= MOBILE_BREAKPOINT);
 	const isPlaying = useAtomValue(isPlayingAtom);
 	const [timeScale, setTimeScale] = useAtom(timeScaleAtom);
 	const [roll, setRoll] = useAtom(rollAtom);

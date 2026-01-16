@@ -32,7 +32,8 @@ const DEFAULT_CAMERA_TARGET = new Vector3(0, 0, 0);
 // Gizmo dimensions for margin calculation
 const GIZMO_WIDTH = 100;
 const GIZMO_HEIGHT = 180;
-const MIN_MARGIN = 20;
+const MIN_MARGIN = 8;
+const MOBILE_BREAKPOINT = 600;
 
 // Camera view options
 const CAMERA_VIEW_OPTIONS: SegmentedButtonOption<CameraTarget>[] = [
@@ -354,6 +355,8 @@ export function SceneToolbar() {
 		}
 	};
 
+	const isMobile = size.width < MOBILE_BREAKPOINT;
+
 	// Calculate offset ensuring gizmo stays within viewport
 	const rightEdge = size.width / 2;
 	const topEdge = size.height / 2;
@@ -366,6 +369,47 @@ export function SceneToolbar() {
 
 	const offsetX = Math.min(targetOffsetX, maxOffsetX);
 	const offsetY = Math.min(targetOffsetY, maxOffsetY);
+
+	if (isMobile) {
+		// Mobile layout: Gizmo stays top-right, buttons grouped top-left
+		const leftEdge = -size.width / 2;
+		const leftX = (leftEdge + MIN_MARGIN + 80) / 100;
+		const topY = (topEdge - MIN_MARGIN - 20) / 100;
+
+		// Spacing: small gap (~4px = 0.04) between elements
+		const gap = 0.04;
+		const segmentedButtonWidth = 1.2;
+		const iconButtonWidth = 0.32;
+
+		// Buttons spread rightward from left: [CameraToggle] [Reset] [Help]
+		const cameraX = leftX;
+		const resetX = cameraX + segmentedButtonWidth + gap;
+		const helpX = resetX + iconButtonWidth + gap;
+
+		// Compensate for internal Y offsets to align buttons at same visual top
+		// CameraViewToggle: internally subtracts 1.8
+		// ControlsHelpButton: internally subtracts 1.3
+		// ResetCameraButton: internally subtracts 0.8
+		const cameraY = topY + 1.8;
+		const resetY = topY + 0.8;
+		const helpY = topY + 1.3;
+
+		return (
+			<Hud>
+				<OrthographicCamera makeDefault position={[0, 0, 10]} zoom={100} />
+				<SyncedAxisGizmo
+					offsetX={offsetX}
+					offsetY={offsetY}
+					selectedAxes={selectedAxes}
+					onAxisClick={handleAxisClick}
+				/>
+				<CameraViewToggle offsetX={cameraX} offsetY={cameraY} />
+				<ResetCameraButton offsetX={resetX} offsetY={resetY} />
+				<ControlsHelpButton offsetX={helpX} offsetY={helpY} />
+				<ambientLight intensity={1} />
+			</Hud>
+		);
+	}
 
 	return (
 		<Hud>

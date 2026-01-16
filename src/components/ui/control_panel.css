@@ -3,6 +3,11 @@
 	background: var(--surface-container);
 	border-top: 1px solid var(--outline);
 	overflow: hidden;
+	padding-bottom: var(--safe-area-bottom);
+}
+
+.control-panel.collapsed {
+	padding-bottom: var(--safe-area-bottom);
 }
 
 .panel-header {

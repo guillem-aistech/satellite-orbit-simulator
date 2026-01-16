@@ -1,4 +1,7 @@
 :root {
+	/* Safe area for mobile browsers with bottom navigation */
+	--safe-area-bottom: env(safe-area-inset-bottom, 0px);
+
 	/* Colors - Surface */
 	--surface: #0a0a14;
 	--surface-container-low: rgba(15, 15, 25, 0.9);
