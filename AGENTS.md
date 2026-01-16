@@ -58,6 +58,10 @@ pnpm opensrc <owner>/<repo>      # GitHub repo
 
 **Patterns**: Follow existing code in each directory. See `docs/ARCHITECTURE.md` for structure.
 
+## Skills
+
+- **write-commits**: Generates git commit messages following repository conventions. See `.cursor/skills/write-commits/SKILL.md` for full details.
+
 ## Common Tasks
 
 **Add orbit type**:
