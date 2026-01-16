@@ -69,4 +69,4 @@ Open <http://localhost:4000> in your browser.
 
 React, Three.js (via React Three Fiber), TypeScript, Vite
 
-See `docs/ARCHITECTURE.md` for full details.
+See [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md) for full details.
