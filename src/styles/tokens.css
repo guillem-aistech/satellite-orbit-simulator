@@ -1,0 +1,61 @@
+:root {
+	/* Colors - Surface */
+	--surface: #0a0a14;
+	--surface-container-low: rgba(15, 15, 25, 0.9);
+	--surface-container: rgba(10, 10, 20, 0.9);
+	--surface-container-high: rgba(20, 20, 35, 0.95);
+
+	/* Colors - On Surface */
+	--on-surface: #ffffff;
+	--on-surface-variant: rgba(255, 255, 255, 0.7);
+
+	/* Colors - Primary */
+	--primary: #4a9dff;
+	--primary-hover: #6bb0ff;
+	--on-primary: #000000;
+
+	/* Colors - Outline */
+	--outline: rgba(255, 255, 255, 0.1);
+
+	/* Spacing - Fluid */
+	--space-xs: clamp(0.25rem, 0.5vw, 0.5rem);
+	--space-sm: clamp(0.5rem, 1vw, 0.75rem);
+	--space-md: clamp(0.75rem, 2vw, 1.25rem);
+	--space-lg: clamp(1rem, 3vw, 2rem);
+	--space-xl: clamp(1.5rem, 4vw, 3rem);
+
+	/* Typography - Sizes */
+	--title-lg: clamp(1.25rem, 2.5vw, 1.5rem);
+	--title-sm: clamp(1rem, 2vw, 1.25rem);
+	--body-lg: clamp(0.875rem, 1.5vw, 1rem);
+	--body-sm: clamp(0.8rem, 1.2vw, 0.875rem);
+	--label-lg: clamp(0.8rem, 1.2vw, 0.875rem);
+	--label-sm: clamp(0.7rem, 1vw, 0.75rem);
+
+	/* Typography - Font */
+	--font-family: "Poppins", sans-serif;
+}
+
+*,
+*::before,
+*::after {
+	box-sizing: border-box;
+	margin: 0;
+	padding: 0;
+}
+
+html,
+body,
+#root {
+	height: 100%;
+	width: 100%;
+	overflow: hidden;
+}
+
+body {
+	font-family: var(--font-family);
+	background: var(--surface);
+	color: var(--on-surface);
+	-webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;
+}
