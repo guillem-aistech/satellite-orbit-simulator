@@ -95,37 +95,13 @@
 	flex-wrap: nowrap;
 }
 
-.collapsed-axis-controls {
+.collapsed-playback-controls {
 	flex-wrap: nowrap;
 }
 
-.axis-button {
-	width: var(--space-md);
-	height: var(--space-md);
-	padding: 0;
-	border: 1px solid var(--outline);
-	border-radius: var(--space-xs);
-	background: transparent;
-	font-size: var(--label-sm);
-	font-weight: 600;
-	font-family: var(--font-family);
-	cursor: pointer;
-	transition:
-		background 0.15s ease,
-		border-color 0.15s ease;
-}
-
-.axis-button:hover {
-	background: rgba(255, 255, 255, 0.1);
-}
-
-.axis-button.selected {
-	background: rgba(255, 255, 255, 0.15);
-}
-
-/* Hide axis controls on very small screens */
+/* Hide step buttons on very small screens */
 @media (max-width: 480px) {
-	.collapsed-axis-controls {
+	.collapsed-playback-controls {
 		display: none;
 	}
 }

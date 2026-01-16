@@ -40,14 +40,13 @@
  *
  * ## Collapsed Mode
  * When collapsed, shows minimal controls:
+ * - Step backward/forward buttons
  * - Play/pause button
  * - Current time
- * - Axis lock buttons (X, Y, Z)
  */
 
 import { useAtom, useAtomValue } from "@effect-atom/atom-react";
 import { useEffect, useRef, useState } from "react";
-import { type AxisKey, selectedAxesAtom } from "../../atoms/camera.ts";
 import { pitchAtom, rollAtom, yawAtom } from "../../atoms/satellite.ts";
 import {
 	elapsedTimeAtom,
@@ -65,20 +64,17 @@ import { PlayPauseButton } from "./play_pause.tsx";
 import { Readout } from "./readout.tsx";
 import { Slider } from "./slider.tsx";
 import { XStack, YStack } from "./stack.tsx";
+import { StepButton } from "./step_button.tsx";
 import "./control_panel.css";
-
-/** Axis colors for visual consistency across UI */
-const AXIS_COLORS: Record<AxisKey, string> = {
-	x: "#ff4444",
-	y: "#44ff44",
-	z: "#4444ff",
-};
 
 /**
  * Time scrubber range in radians (±1 full orbit).
  * This is independent of time scale for consistent user experience.
  */
 const SCRUBBER_ANGLE_RANGE = Math.PI * 2;
+
+/** Step size for time scrubber buttons (30 degrees = 1/12 of a full orbit) */
+const SCRUBBER_STEP = Math.PI / 6;
 
 /** Chevron icon for expand/collapse toggle */
 function ChevronIcon({ expanded }: { expanded: boolean }) {
@@ -103,35 +99,6 @@ function ChevronIcon({ expanded }: { expanded: boolean }) {
 	);
 }
 
-/** Colored axis button for rotation lock controls */
-function AxisButton({
-	axis,
-	selected,
-	onClick,
-}: {
-	axis: AxisKey;
-	selected: boolean;
-	onClick: () => void;
-}) {
-	return (
-		<button
-			type="button"
-			onClick={(e) => {
-				e.stopPropagation();
-				onClick();
-			}}
-			className={`axis-button ${selected ? "selected" : ""}`}
-			style={{
-				color: AXIS_COLORS[axis],
-				borderColor: selected ? AXIS_COLORS[axis] : undefined,
-			}}
-			aria-label={`${selected ? "Unlock" : "Lock"} ${axis.toUpperCase()} axis`}
-		>
-			{axis.toUpperCase()}
-		</button>
-	);
-}
-
 export function ControlPanel() {
 	const [isExpanded, setIsExpanded] = useState(true);
 	const isPlaying = useAtomValue(isPlayingAtom);
@@ -141,7 +108,6 @@ export function ControlPanel() {
 	const [yaw, setYaw] = useAtom(yawAtom);
 	const [orbitalAngle, setOrbitalAngle] = useAtom(orbitalAngleAtom);
 	const [elapsedTime, setElapsedTime] = useAtom(elapsedTimeAtom);
-	const [selectedAxes, setSelectedAxes] = useAtom(selectedAxesAtom);
 	const orbitTypeId = useAtomValue(orbitTypeAtom);
 
 	// Track scrubber offset directly (not derived from angle to avoid wrap issues)
@@ -185,6 +151,19 @@ export function ControlPanel() {
 	};
 
 	/**
+	 * Step the time scrubber by a fixed increment.
+	 * Pauses the simulation if playing.
+	 */
+	const handleScrubberStep = (direction: "backward" | "forward") => {
+		const multiplier = direction === "backward" ? -1 : 1;
+		const newOffset = Math.max(
+			-SCRUBBER_ANGLE_RANGE,
+			Math.min(SCRUBBER_ANGLE_RANGE, scrubberOffset + multiplier * SCRUBBER_STEP),
+		);
+		handleScrubberChange(newOffset);
+	};
+
+	/**
 	 * Reset simulation to initial state.
 	 * Resets: attitude (roll, pitch, yaw), time, orbital position, camera view.
 	 * Preserves: time scale (user preference).
@@ -212,15 +191,6 @@ export function ControlPanel() {
 		setYaw(0);
 	};
 
-	/** Toggle axis rotation lock */
-	const handleAxisClick = (axis: AxisKey) => {
-		if (selectedAxes.includes(axis)) {
-			setSelectedAxes(selectedAxes.filter((a) => a !== axis));
-		} else {
-			setSelectedAxes([...selectedAxes, axis]);
-		}
-	};
-
 	return (
 		<div className={`control-panel ${isExpanded ? "expanded" : "collapsed"}`}>
 			{/* Header bar - always visible, toggles expand/collapse */}
@@ -236,25 +206,20 @@ export function ControlPanel() {
 					{/* Collapsed mode: show minimal inline controls */}
 					{!isExpanded && (
 						<XStack gap="sm" align="center" className="collapsed-controls">
-							<PlayPauseButton />
-							<span className="collapsed-status">{formatTime(elapsedTime)}</span>
-							<XStack gap="xs" align="center" className="collapsed-axis-controls">
-								<AxisButton
-									axis="x"
-									selected={selectedAxes.includes("x")}
-									onClick={() => handleAxisClick("x")}
+							<XStack gap="xs" align="center" className="collapsed-playback-controls">
+								<StepButton
+									direction="backward"
+									onClick={() => handleScrubberStep("backward")}
+									disabled={scrubberOffset <= -SCRUBBER_ANGLE_RANGE}
 								/>
-								<AxisButton
-									axis="y"
-									selected={selectedAxes.includes("y")}
-									onClick={() => handleAxisClick("y")}
-								/>
-								<AxisButton
-									axis="z"
-									selected={selectedAxes.includes("z")}
-									onClick={() => handleAxisClick("z")}
+								<PlayPauseButton />
+								<StepButton
+									direction="forward"
+									onClick={() => handleScrubberStep("forward")}
+									disabled={scrubberOffset >= SCRUBBER_ANGLE_RANGE}
 								/>
 							</XStack>
+							<span className="collapsed-status">{formatTime(elapsedTime)}</span>
 						</XStack>
 					)}
 				</XStack>
